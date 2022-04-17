@@ -20,7 +20,7 @@ let
     ];
 
     tooling =
-      [ nodePackages.prettier shellcheck stylua ];
+      [ gcc nodePackages.prettier shellcheck stylua ];
 
     multimedia = [ ffmpeg ];
 
@@ -29,7 +29,7 @@ let
 
 in
 {
-  imports = [ ./git.nix ];
+  imports = [ ./neovim ./git.nix ];
 
   programs.home-manager.enable = true;
 
