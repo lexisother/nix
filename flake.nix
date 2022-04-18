@@ -8,6 +8,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    dotfiles = {
+      url = "https://github.com/keanuplayz/dotfiles";
+      type = "git";
+      submodules = true;
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
@@ -20,7 +27,10 @@
         , server ? false }:
         home-manager.lib.homeManagerConfiguration (baseHomeConfig // {
           inherit username system homeDirectory;
-          extraSpecialArgs = { inherit server; };
+          extraSpecialArgs = {
+            inherit server;
+            inherit (inputs) dotfiles;
+          };
           stateVersion = "22.05";
         });
     in {

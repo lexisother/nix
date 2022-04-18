@@ -1,5 +1,23 @@
 {
   "nodes": {
+    "dotfiles": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650243032,
+        "narHash": "sha256-HU4knoZ62xkjhT0BvDqg+jUYb5D4rFE8rJDG5kq0d3Y=",
+        "ref": "master",
+        "rev": "7ca2f7153eaad39f44d3f0f1b48b68f262346e64",
+        "revCount": 222,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/keanuplayz/dotfiles"
+      },
+      "original": {
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/keanuplayz/dotfiles"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -38,6 +56,7 @@
     },
     "root": {
       "inputs": {
+        "dotfiles": "dotfiles",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs"
       }
