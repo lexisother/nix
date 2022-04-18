@@ -14,6 +14,29 @@
       };
     });
 
+    # Symlink `vi` and `vim` to `nvim`
+    viAlias = true;
+    vimAlias = true;
+
     extraConfig = "source ~/.dotfiles/nvim/init.vim";
+
+    coc = {
+      enable = true;
+
+      settings = {
+        languageserver = {
+          nix = {
+            command = "rnix-lsp";
+            filetypes = [
+              "nix"
+            ];
+          };
+        };
+        "go.goPlsOptions" = {
+          completion = true;
+          completeUnimported = true;
+        };
+      };
+    };
   };
 }
