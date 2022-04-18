@@ -31,7 +31,7 @@ let
 
 in
 {
-  imports = [ ./neovim ./git.nix ./zsh.nix ];
+  imports = [ ./neovim ./git.nix ./ssh.nix ./zsh.nix ];
 
   programs.home-manager.enable = true;
 
