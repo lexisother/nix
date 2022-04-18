@@ -14,6 +14,7 @@ let
       wget
       nixfmt
       rnix-lsp
+      zsh
     ];
 
     languages = [
@@ -30,7 +31,7 @@ let
 
 in
 {
-  imports = [ ./neovim ./git.nix ];
+  imports = [ ./neovim ./git.nix ./zsh.nix ];
 
   programs.home-manager.enable = true;
 
