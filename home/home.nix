@@ -13,6 +13,7 @@ let
       tree
       wget
       nixfmt
+      rnix-lsp
     ];
 
     languages = [
