@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, dotfiles, ... }:
 
 {
   programs.neovim = {
@@ -18,7 +18,7 @@
     viAlias = true;
     vimAlias = true;
 
-    extraConfig = "source ~/.dotfiles/nvim/init.vim";
+    extraConfig = "source ${dotfiles}/nvim/init.vim";
 
     coc = {
       enable = true;
