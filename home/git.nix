@@ -5,6 +5,10 @@
     enable = true;
     userName = "Alyxia Sother";
     userEmail = "alyxia@riseup.net";
+    signing = {
+      key = "01E16C4E775A37E4";
+      signByDefault = true;
+    };
 
     delta = {
       enable = true;
@@ -16,6 +20,7 @@
     };
 
     extraConfig = {
+      tag.gpgsign = true;
       init.defaultBranch = "master";
     };
   };
