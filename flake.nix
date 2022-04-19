@@ -20,9 +20,19 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     (
       let
+        localOverlay = final: {
+          impregnate = final.callPackage ./pkgs/impregnate.nix { };
+        };
+
+        pkgsForSystem = system: import nixpkgs {
+          overlays = [
+            localOverlay
+          ];
+          inherit system;
+        };
+
         baseHomeConfig = {
           configuration.imports = [ ./home/home.nix ];
-          extraModules = [ ./modules/impregnate ];
         };
 
         hm =
@@ -33,16 +43,20 @@
           }:
           home-manager.lib.homeManagerConfiguration (baseHomeConfig // {
             inherit username system homeDirectory;
+            pkgs = pkgsForSystem system;
             extraSpecialArgs = {
               inherit server;
+              inherit localOverlay;
               inherit (inputs) dotfiles;
             };
             stateVersion = "22.05";
           });
       in
       {
-        packages = {
-          x86_64-linux.homeConfigurations.alyxia = hm {
+        packages.x86_64-linux = {
+          overlay = localOverlay;
+
+          homeConfigurations.alyxia = hm {
             system = "x86_64-linux";
             server = true;
           };
