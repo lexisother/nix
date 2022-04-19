@@ -12,8 +12,7 @@ let
       htop
       tree
       wget
-      nixfmt
-      rnix-lsp
+      impregnate
       zsh
     ];
 
@@ -21,8 +20,14 @@ let
       nodejs
     ];
 
-    tooling =
-      [ gcc nodePackages.prettier shellcheck stylua ];
+    tooling = [
+      gcc
+      nodePackages.prettier
+      nixfmt
+      rnix-lsp
+      shellcheck
+      stylua
+    ];
 
     multimedia = [ ffmpeg ];
 

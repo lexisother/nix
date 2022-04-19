@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchurl }:
+{ lib, stdenvNoCC, fetchurl, autoPatchelfHook }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "impregnate";
@@ -6,13 +6,18 @@ stdenvNoCC.mkDerivation rec {
   phases = [ "installPhase" "fixupPhase" ];
 
   src = fetchurl {
-    url = "https://github.com/Cumcord/Impregnate/releases/download/v1.3.1/impregnate.Linux";
+    url = "https://github.com/Cumcord/Impregnate/releases/download/v${version}/impregnate.Linux";
     sha256 = "84f0477e1a03762113e8b3649fd19064063f4162746fae3bf1a0eedf3bb5f192";
   };
 
+  nativeBuildInputs = [
+    autoPatchelfHook
+  ];
+
+  sourceRoot = ".";
+
   installPhase = ''
-    mkdir -p $out/share/impregnate
-    echo "hi" > $out/share/impregnate/test.txt
+    install -m755 -D ${src} $out/bin/impregnate
   '';
 
   meta = with lib; {
