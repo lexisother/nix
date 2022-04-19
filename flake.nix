@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    utils.url = "github:numtide/flake-utils";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -17,50 +18,43 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
-    (
-      let
-        localOverlay = final: {
-          impregnate = final.callPackage ./pkgs/impregnate.nix { };
-        };
+  outputs = { self, nixpkgs, home-manager, dotfiles, utils, ... }:
+    let
+      localOverlay = prev: final: {
+        impregnate = final.callPackage ./pkgs/impregnate.nix { };
+      };
 
-        pkgsForSystem = system: import nixpkgs {
-          overlays = [
-            localOverlay
-          ];
-          inherit system;
-        };
+      pkgsForSystem = system: import nixpkgs {
+        overlays = [
+          localOverlay
+        ];
+        inherit system;
+      };
 
-        baseHomeConfig = {
-          configuration.imports = [ ./home/home.nix ];
-        };
+      # TODO: Make a bit more like the old one
+      mkHomeConfiguration = args: home-manager.lib.homeManagerConfiguration (rec {
+        system = args.system or "x86_64-linux";
+        configuration.imports = [ ./home/home.nix ];
+        homeDirectory = "/home/alyxia";
+        username = "alyxia";
+        pkgs = pkgsForSystem system;
+        stateVersion = "22.05";
+      } // args);
 
-        hm =
-          { system
-          , username ? "alyxia"
-          , homeDirectory ? "/home/alyxia"
-          , server ? false
-          }:
-          home-manager.lib.homeManagerConfiguration (baseHomeConfig // {
-            inherit username system homeDirectory;
-            pkgs = pkgsForSystem system;
-            extraSpecialArgs = {
-              inherit server;
-              inherit localOverlay;
-              inherit (inputs) dotfiles;
-            };
-            stateVersion = "22.05";
-          });
-      in
-      {
-        packages.x86_64-linux = {
-          overlay = localOverlay;
+    in
+    utils.lib.eachSystem [ "x86_64-linux" ]
+      (system: rec {
+        legacyPackages = pkgsForSystem system;
+      }) // {
+      overlay = localOverlay;
 
-          homeConfigurations.alyxia = hm {
-            system = "x86_64-linux";
-            server = true;
-          };
+      homeConfigurations.alyxia = mkHomeConfiguration {
+        extraSpecialArgs = {
+          withGUI = true;
+          isDesktop = true;
+          inherit localOverlay;
+          inherit dotfiles;
         };
-      }
-    );
+      };
+    };
 }
