@@ -20,6 +20,9 @@
 
   outputs = { self, nixpkgs, home-manager, dotfiles, utils, ... }:
     let
+      # I sure hope I'll only be running this on one arch...
+      system = "x86_64-linux";
+
       localOverlay = prev: final: {
         impregnate = final.callPackage ./pkgs/impregnate.nix { };
       };
@@ -33,12 +36,10 @@
 
       # TODO: Make a bit more like the old one
       mkHomeConfiguration = args: home-manager.lib.homeManagerConfiguration (rec {
-        system = args.system or "x86_64-linux";
-        configuration.imports = [ ./home/home.nix ];
-        homeDirectory = "/home/alyxia";
-        username = "alyxia";
         pkgs = pkgsForSystem system;
-        stateVersion = "22.05";
+        modules = [
+          ./home/home.nix
+        ];
       } // args);
 
     in
@@ -46,7 +47,7 @@
       (system: rec {
         legacyPackages = pkgsForSystem system;
       }) // {
-      overlay = localOverlay;
+      overlays.default = localOverlay;
 
       homeConfigurations.alyxia = mkHomeConfiguration {
         extraSpecialArgs = {
