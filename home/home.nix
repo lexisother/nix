@@ -36,7 +36,7 @@ let
 
 in
 {
-  imports = [ ./neovim ./git.nix ./ssh.nix ./zsh.nix ];
+  imports = [ ./neovim ./discord ./discord.nix ./git.nix ./ssh.nix ./zsh.nix ];
 
   programs.home-manager.enable = true;
 
@@ -50,5 +50,5 @@ in
     };
   };
 
-  home.stateVersion = "22.05";
+  home.stateVersion = "22.11";
 }
